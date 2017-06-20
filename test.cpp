@@ -83,9 +83,9 @@ static int initialize()
 	// Specifies a list of context property names and their corresponding values. Each property name is immediately followed by the corresponding desired value.
 	// The list is terminated with 0. properties can be NULL in which case the platform that is selected is implementation-defined.
 	// The list of supported properties is described in the table below.
-	cl_context_properties ctxprop[] = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[0], 0};
+	cl_context_properties ctxprop_fpga[] = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[0], 0};
 
-	context1 = clCreateContextFromType(ctxprop, CL_DEVICE_TYPE_ACCELERATOR, NULL, NULL, NULL);
+	context1 = clCreateContextFromType(ctxprop_fpga, CL_DEVICE_TYPE_ACCELERATOR, NULL, NULL, NULL);
 	if( !context1 ) { printf("ERROR: clCreateContextFromType(%s) failed\n", "FPGA"); return -1; }
 
 	// get the list of FPGAs
@@ -105,8 +105,8 @@ static int initialize()
 
 
 	// NVIDIA CUDA is idx=1
-	ctxprop = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[1], 0};
-	context2 = clCreateContextFromType(ctxprop, CL_DEVICE_TYPE_GPU, NULL, NULL, NULL );
+	cl_context_properties ctxprop_gpu[] = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[1], 0};
+	context2 = clCreateContextFromType(ctxprop_gpu, CL_DEVICE_TYPE_GPU, NULL, NULL, NULL );
 	if( !context2 ) { printf("ERROR: clCreateContextFromType(%s) failed\n", "GPU"); return -1; }
 
 	// get the list of GPUs
