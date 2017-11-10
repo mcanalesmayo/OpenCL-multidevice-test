@@ -7,7 +7,9 @@ __kernel void kernel_vect_add(__global int* restrict a, __global int* restrict b
 		a[i] = i;
 	}
 
-	for(i=0; i<vlen; i++) a[i] = a[i] + b[i];
+	for(i=0; i<vlen; i++) {
+    a[i] += b[i];
+  }
 	
 	return;
 }

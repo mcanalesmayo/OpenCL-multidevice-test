@@ -78,12 +78,12 @@ static int initialize()
 		printf("Platform %d: %s\n", i, platform_name);
 	}
 
-	// Intel Altera is idx=0
+	// Intel Altera is idx=1
 	// cl_context_properties:
 	// Specifies a list of context property names and their corresponding values. Each property name is immediately followed by the corresponding desired value.
 	// The list is terminated with 0. properties can be NULL in which case the platform that is selected is implementation-defined.
 	// The list of supported properties is described in the table below.
-	cl_context_properties ctxprop_fpga[] = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[0], 0};
+	cl_context_properties ctxprop_fpga[] = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[1], 0};
 
 	context1 = clCreateContextFromType(ctxprop_fpga, CL_DEVICE_TYPE_ACCELERATOR, NULL, NULL, NULL);
 	if( !context1 ) { printf("ERROR: clCreateContextFromType(%s) failed\n", "FPGA"); return -1; }
@@ -104,8 +104,8 @@ static int initialize()
 
 
 
-	// NVIDIA CUDA is idx=1
-	cl_context_properties ctxprop_gpu[] = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[1], 0};
+	// NVIDIA CUDA is idx=0
+	cl_context_properties ctxprop_gpu[] = { CL_CONTEXT_PLATFORM, (cl_context_properties) platform_ids[0], 0};
 	context2 = clCreateContextFromType(ctxprop_gpu, CL_DEVICE_TYPE_GPU, NULL, NULL, NULL );
 	if( !context2 ) { printf("ERROR: clCreateContextFromType(%s) failed\n", "GPU"); return -1; }
 
@@ -263,7 +263,7 @@ int all_setup()
 	cl_device_id *devices;
 	cl_uint num_devices;
 
-	devices = aocl_utils::getDevices(platform_ids[0], CL_DEVICE_TYPE_ALL, &num_devices);
+	devices = aocl_utils::getDevices(platform_ids[1], CL_DEVICE_TYPE_ALL, &num_devices);
 
 	// We'll just use the first device.
 	cl_device_id device = devices[0];
@@ -277,7 +277,7 @@ int all_setup()
   	err = clBuildProgram(prog1, 0, NULL, NULL, NULL, NULL);
   	if (err != CL_SUCCESS) { printf("ERROR: FPGA clBuildProgram() => %d\n", err); return -1; }
 
-  	/* ----------- */
+  /* ----------- */
 	/* GPU program */
 	/* ----------- */
 
@@ -289,7 +289,7 @@ int all_setup()
 		if (err == CL_BUILD_PROGRAM_FAILURE) {
 		    // Determine the size of the log
 		    size_t log_size;
-		    devices = aocl_utils::getDevices(platform_ids[1], CL_DEVICE_TYPE_ALL, &num_devices);
+		    devices = aocl_utils::getDevices(platform_ids[0], CL_DEVICE_TYPE_ALL, &num_devices);
 		    clGetProgramBuildInfo(prog2, devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
 		    // Allocate memory for the log
 		    char *log = (char *) malloc(log_size);
